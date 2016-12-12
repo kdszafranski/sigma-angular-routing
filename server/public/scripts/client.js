@@ -1,6 +1,6 @@
 var app = angular.module('myApp', ['ngRoute']);
 
-app.config(['$routeProvider', function($routeProvider) {
+app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider
     .when('/home', {
       templateUrl: '/views/templates/home.html',
@@ -16,14 +16,20 @@ app.config(['$routeProvider', function($routeProvider) {
       redirectTo: 'home'
     });
 
+  $locationProvider.html5Mode(true);
 }]);
 
-app.controller('HomeController', function() {
+app.controller('HomeController', ['$http', function($http) {
   console.log('home controller running');
   var self = this;
   self.message = "Home controller is the best!";
 
-});
+  // server-direct route to /home
+  $http.get('/info').then(function(response) {
+    console.log(response.data);
+  });
+
+}]);
 
 app.controller('PotatoController', function() {
   console.log('potato controller running');
